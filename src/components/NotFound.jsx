@@ -1,6 +1,28 @@
-import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const NotFound = () => {
+  const [loading, setLoading] = useState(false);
+  const [buttonText, setButtonText] = useState(
+    "Back to Homepage",
+  );
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    let timeout;
+    if (loading) {
+      timeout = setTimeout(() => {
+        navigate("/"); // Переход на главную страницу
+      }, 1000); // Задержка в 2 секунды
+    }
+    return () => clearTimeout(timeout);
+  }, [loading, navigate]);
+
+  const handleClick = () => {
+    setButtonText("Loading...");
+    setLoading(true);
+  };
+
   return (
     <div className="bg-neutral-900">
       <div className="flex flex-col space-y-3 min-h-screen items-center justify-center relative p-5 md:p-0">
@@ -16,8 +38,9 @@ const NotFound = () => {
         <button
           type="button"
           className="py-2 md:py-3 px-3 md:px-5 bg-red-700 hover:bg-rose-700 rounded-2xl z-20 flex justify-center items-center text-sm lg:text-base"
+          onClick={handleClick}
         >
-          <Link to="/">Back to Homepage</Link>
+          <span>{buttonText}</span>
         </button>
       </div>
     </div>
